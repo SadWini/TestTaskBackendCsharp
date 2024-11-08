@@ -37,12 +37,13 @@ public class TranslationService : ITranslationService
         };
     }
 
-    public Task<ServiceInfo> GetInfoAsync()
+    public async Task<ServiceInfo> GetInfoAsync()
     {
-        return Task.FromResult(new ServiceInfo
+        var cacheSize = await _cacheService.GetCacheSizeAsync();
+        return new ServiceInfo
         {
             ServiceName = _apiServiceName,
-            CacheType = "Entity Framework + PostgreSQL"
-        });
+            CacheSize = cacheSize
+        };
     }
 }

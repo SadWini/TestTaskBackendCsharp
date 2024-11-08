@@ -1,3 +1,5 @@
+using System.Data;
+using System.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using TranslationService.Caching.DbContexts;
 using TranslationService.Caching.Entities;
@@ -32,11 +34,11 @@ public class EfCacheService : ICacheService
         return cacheEntry?.TranslatedText;
     }
     
-    public async Task<string> GetCacheSizeAsync()
+    public async Task<string?> GetCacheSizeAsync()
     {
         const string query = "SELECT pg_size_pretty(pg_database_size(current_database())) AS database_size;";
-        var result = await _context.Database.ExecuteSqlRawAsync(query);
+        var result = _context.Database.SqlQueryRaw<string>(query);
 
-        return result.ToString() ?? "Unknown size";
+        return result.ToList().First();
     }
 }

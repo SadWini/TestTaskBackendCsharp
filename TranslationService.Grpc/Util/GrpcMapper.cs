@@ -27,7 +27,7 @@ public class GrpcMapper
     {
         return new InfoResponse()
         {
-            CacheType = response.CacheType,
+            CacheSize = response.CacheSize,
             ServiceName = response.ServiceName
         };
     }

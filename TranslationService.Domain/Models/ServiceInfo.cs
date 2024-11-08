@@ -7,5 +7,5 @@ public class ServiceInfo
     [Required]
     public string ServiceName { get; set; }      
     [Required]
-    public string CacheType { get; set; }
+    public string CacheSize { get; set; }
 }

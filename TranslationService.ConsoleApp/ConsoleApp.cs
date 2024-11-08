@@ -18,27 +18,37 @@ class ConsoleApp
         var translationService = serviceProvider.GetRequiredService<ITranslationService>();
         while (true)
         {
-            Console.WriteLine("Введите текст для перевода:");
-            var text = Console.ReadLine();
-
-            Console.WriteLine("Введите исходный язык (например, 'en'):");
-            var fromLang = Console.ReadLine();
-
-            Console.WriteLine("Введите язык перевода (например, 'ru'):");
-            var toLang = Console.ReadLine();
-            TranslationRequest req = new TranslationRequest()
-            {
-                Text = text,
-                FromLanguage = fromLang,
-                ToLanguage = toLang
-            };
-            var translatedText = await translationService.TranslateAsync(req);
+            var translatedText = await translationService.TranslateAsync(CreateRequest());
             var info = await translationService.GetInfoAsync();
-            Console.WriteLine($"Перевод: {translatedText} + " +
-                              $"{Environment.NewLine}" +
-                              $"{info.CacheType}" + 
-                              $"{info.ServiceName})");
+            WriteResult(translatedText, info);
         }
+    }
+
+    private static TranslationRequest CreateRequest()
+    {
+        Console.WriteLine("Введите текст для перевода:");
+        var text = Console.ReadLine();
+
+        Console.WriteLine("Введите исходный язык (например, 'en'):");
+        var fromLang = Console.ReadLine();
+
+        Console.WriteLine("Введите язык перевода (например, 'ru'):");
+        var toLang = Console.ReadLine();
+        return new TranslationRequest()
+        {
+            Text = text,
+            FromLanguage = fromLang,
+            ToLanguage = toLang
+        };
+    }
+
+    private static void WriteResult(TranslationResponse req, ServiceInfo info)
+    {
+        Console.WriteLine($"Перевод: {req.TranslatedText} " +
+                          $"{Environment.NewLine}" +
+                          $"Current size of cache is {info.CacheSize}" + 
+                          $"{Environment.NewLine}"+
+                          $"{info.ServiceName})");
     }
     
     public static IHostBuilder CreateHostBuilder(string[] args) =>
