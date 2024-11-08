@@ -31,4 +31,12 @@ public class EfCacheService : ICacheService
                                       && t.ToLanguage == request.ToLanguage);
         return cacheEntry?.TranslatedText;
     }
+    
+    public async Task<string> GetCacheSizeAsync()
+    {
+        const string query = "SELECT pg_size_pretty(pg_database_size(current_database())) AS database_size;";
+        var result = await _context.Database.ExecuteSqlRawAsync(query);
+
+        return result.ToString() ?? "Unknown size";
+    }
 }
