@@ -1,7 +1,9 @@
+using TranslationService.Domain.Models;
+
 namespace TranslationService.Domain.Interfaces;
 
 public interface ITranslationService
 {
-    string TranslateText(string text, string sourceLanguage, string targetLanguage);
-    
+    Task<TranslationResponse> TranslateAsync(TranslationRequest request);
+    Task<ServiceInfo> GetInfoAsync();
 }
