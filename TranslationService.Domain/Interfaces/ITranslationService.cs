@@ -4,6 +4,6 @@ namespace TranslationService.Domain.Interfaces;
 
 public interface ITranslationService
 {
-    Task<TranslationResponse> TranslateAsync(TranslationRequest request);
+    Task<IList<TranslationResponse>> TranslateAsync(IList<TranslationRequest> requests);
     Task<ServiceInfo> GetInfoAsync();
 }

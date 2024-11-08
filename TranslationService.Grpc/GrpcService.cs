@@ -3,7 +3,7 @@ using Grpc.Net.Client;
 using TranslationService.Domain.Interfaces;
 using TranslationService.Domain.Models;
 using TranslationService.Generated;
-
+using System.Linq;
 namespace TranslationService.Grpc;
 
 public class GrpcService : Generated.TranslationService.TranslationServiceBase
@@ -14,10 +14,14 @@ public class GrpcService : Generated.TranslationService.TranslationServiceBase
         _translationService = translationService;
     }
 
-    public override async Task<TranslateResponse> Translate(TranslateRequest request, ServerCallContext context)
+    public override async Task<TranslateResponses> Translate(TranslateRequests requests, ServerCallContext context)
     {
-        var response = await _translationService.TranslateAsync(GrpcMapper.Map(request));
-        return GrpcMapper.Map(response);
+        IList<TranslationRequest> requestsConv = requests.Requests.Select(x => GrpcMapper.Map(x)).ToList();
+        var response = await _translationService.TranslateAsync(requestsConv);
+        var responseConv = response.Select(x => GrpcMapper.Map(x)).ToList();
+        return new TranslateResponses{
+            Responses =  {  responseConv}
+        };
     }
 
     public override async Task<InfoResponse> GetInfo(InfoRequest request, ServerCallContext context)

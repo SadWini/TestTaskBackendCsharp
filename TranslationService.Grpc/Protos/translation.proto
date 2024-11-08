@@ -3,14 +3,22 @@ syntax = "proto3";
 option csharp_namespace = "TranslationService.Generated";
 
 service TranslationService {
-  rpc Translate (TranslateRequest) returns (TranslateResponse);
+  rpc Translate (TranslateRequests) returns (TranslateResponses);
   rpc GetInfo (InfoRequest) returns (InfoResponse);
+}
+
+message TranslateRequests {
+  repeated TranslateRequest requests = 1;
 }
 
 message TranslateRequest {
   string text = 1;
   string fromLang = 2;
   string toLang = 3;
+}
+
+message TranslateResponses {
+  repeated TranslateResponse responses = 1;
 }
 
 message TranslateResponse {
