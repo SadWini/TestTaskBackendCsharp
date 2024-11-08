@@ -18,9 +18,10 @@ class ConsoleApp
         var translationService = serviceProvider.GetRequiredService<ITranslationService>();
         while (true)
         {
-            var translatedText = await translationService.TranslateAsync(CreateRequest());
+            var translatedText = await translationService.TranslateAsync(
+                new List<TranslationRequest>{CreateRequest()});
             var info = await translationService.GetInfoAsync();
-            WriteResult(translatedText, info);
+            WriteResult(translatedText[0], info);
         }
     }
 
