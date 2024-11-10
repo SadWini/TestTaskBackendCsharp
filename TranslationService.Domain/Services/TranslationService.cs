@@ -6,7 +6,7 @@ namespace TranslationService.Domain.Services;
 public class TranslationService : ITranslationService
 {
     private readonly ICacheService _cacheService;
-    private readonly string _apiServiceName = "Google Translate API";  // TO DO: use real API
+    private readonly string _apiServiceName = "Stub API";  // TO DO: use real API
 
     public TranslationService(ICacheService cacheService)
     {
