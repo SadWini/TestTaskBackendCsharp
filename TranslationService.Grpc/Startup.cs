@@ -7,6 +7,8 @@ using TranslationService.Caching.DbContexts;
 using TranslationService.Caching.Services;
 using TranslationService.Grpc;
 using TranslationService.Domain.Interfaces;
+using FluentValidation;
+using TranslationService.Generated;
 
 namespace TranslationService.Grpc;
 
@@ -31,6 +33,8 @@ public class Startup
             options.UseNpgsql(_configuration.GetConnectionString("DefaultConnection"))); 
         services.AddSingleton<ICacheService, EfCacheService>();
         services.AddScoped<GrpcService>();
+        
+        services.AddValidatorsFromAssemblyContaining<TranslateRequest>();
     }
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {

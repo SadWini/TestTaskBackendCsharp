@@ -34,7 +34,7 @@ public class EfCacheService : ICacheService
         return cacheEntry?.TranslatedText;
     }
     
-    public async Task<string?> GetCacheSizeAsync()
+    public async Task<string> GetCacheSizeAsync()
     {
         const string query = "SELECT pg_size_pretty(pg_database_size(current_database())) AS database_size;";
         var result = _context.Database.SqlQueryRaw<string>(query);
