@@ -10,29 +10,29 @@ namespace TranslationService.Grpc;
 public class GrpcService : Generated.TranslationService.TranslationServiceBase
 {
     private readonly ITranslationService _translationService;
-    private readonly IValidator<TranslationRequest> _translationRequestValidator;
+    private readonly IValidator<TranslateRequest> _translateRequestValidator;
     public GrpcService(ITranslationService translationService, 
-        IValidator<TranslationRequest> translationRequestValidator)
+        IValidator<TranslateRequest> translateRequestValidator)
     {
         _translationService = translationService;
-        _translationRequestValidator = translationRequestValidator;
+        _translateRequestValidator = translateRequestValidator;
     }
 
     public override async Task<TranslateResponses> Translate(TranslateRequests requests, ServerCallContext context)
     {
         IList<TranslationRequest> requestsConv = requests.Requests.Select(request =>
         {
-            var requestConv = GrpcMapper.Map(request);
-            var result = _translationRequestValidator.Validate(requestConv);
+            var result = _translateRequestValidator.Validate(request);
             if (!result.IsValid)
             {
-                throw new RpcException(new Status(StatusCode.InvalidArgument, "Invalid TranslateRequest Item"));
+                throw new FormatException($"Invalid TranslateRequest {request}");
             }
-            return requestConv;
+            return GrpcMapper.Map(request);
         }).ToList();
         var response = await _translationService.TranslateAsync(requestsConv);
         var responseConv = response.Select(x => GrpcMapper.Map(x)).ToList();
-        return new TranslateResponses{
+        return new TranslateResponses 
+        {
             Responses =  {  responseConv}
         };
     }
